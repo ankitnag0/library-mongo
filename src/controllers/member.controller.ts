@@ -27,7 +27,7 @@ export const registerMember = async (
   const savedMember = await newMember.save();
   res.status(201).json({
     success: true,
-    savedMember,
+    data: savedMember,
   });
 };
 
@@ -54,6 +54,6 @@ export const loginMember = async (
 
   res.json({
     success: true,
-    token,
+    data: token,
   });
 };
