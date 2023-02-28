@@ -1,5 +1,5 @@
 import app from "./app";
-import connect from "./database/db";
+import { connect } from "./database/db";
 
 (async () => {
   await connect();

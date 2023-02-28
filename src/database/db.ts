@@ -3,13 +3,20 @@ import config from "../config/config";
 
 import mongoose from "mongoose";
 
-const connect = async () => {
+export const connect = async () => {
   try {
     await mongoose.connect(config.databaseURI);
-    console.log(`Successfully connected to the database`);
+    if (config.nodeEnv !== "test")
+      console.log(`Successfully connected to the database`);
   } catch (err) {
     console.log(`Error in connecting to the database`, err);
   }
 };
 
-export default connect;
+export const disconnect = async () => {
+  try {
+    await mongoose.connection.close();
+  } catch (err) {
+    console.error(`Error in disconnecting from the database`);
+  }
+};
