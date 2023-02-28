@@ -48,7 +48,9 @@ memberSchema.method("comparePassword", async function (password: string) {
 // Generate auth token
 memberSchema.method("generateAuthToken", function () {
   const member = this;
-  const token = jwt.sign({ _id: member._id.toString() }, config.jwtSecret);
+  const token = jwt.sign({ _id: member._id.toString() }, config.jwtSecret, {
+    expiresIn: config.jwtExpiration,
+  });
   return token;
 });
 

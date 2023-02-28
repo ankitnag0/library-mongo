@@ -4,12 +4,18 @@ import Book from "../../src/models/book.model";
 import Member from "../../src/models/member.model";
 import { connect, disconnect } from "../../src/database/db";
 import mongoose, { ObjectId } from "mongoose";
+import {
+  redisClient,
+  redisConnect,
+  redisDisconnect,
+} from "../../src/database/redisClient";
 
 describe("Book", () => {
   let token: string;
   let bookId: ObjectId;
   beforeAll(async () => {
     await connect();
+    await redisConnect();
     const registerMemberResponse = await request(app)
       .post("/api/members")
       .send({
@@ -33,6 +39,8 @@ describe("Book", () => {
     await Book.collection.drop();
     await Member.collection.drop();
     await disconnect();
+    await redisClient.flushAll();
+    await redisDisconnect();
   });
 
   it("should add a new book", async () => {
