@@ -81,3 +81,4 @@ To run the tests, use the following command:
 ```
 npm test
 ```
+This will run the Jest test suite, which tests the API endpoints.
