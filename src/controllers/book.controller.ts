@@ -15,6 +15,7 @@ export const addBook = async (req: Request, res: Response): Promise<void> => {
     copies,
   });
   const savedBook = await newBook.save();
+  await redisClient.del("books");
   res.status(201).json({
     success: true,
     data: savedBook,
