@@ -112,3 +112,45 @@ export const deleteBook = async (
     data: book,
   });
 };
+
+// Merge sort function for sorting books by title
+function mergeSort(arr: any[]) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const middle = Math.floor(arr.length / 2);
+  const left = arr.slice(0, middle);
+  const right = arr.slice(middle);
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left: any[], right: any[]) {
+  const result = [];
+  let i = 0;
+  let j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i].title < right[j].title) {
+      result.push(left[i]);
+      i++;
+    } else {
+      result.push(right[j]);
+      j++;
+    }
+  }
+  return result.concat(left.slice(i)).concat(right.slice(j));
+}
+
+// Get the books in sorted order by title
+export const getSortedBooks = async (req: Request, res: Response) => {
+  const books = await Book.find();
+  await redisClient.setEx(
+    "books",
+    config.redisCacheExpiration,
+    JSON.stringify(books)
+  );
+  const sortedBooks = mergeSort(books);
+  res.status(200).send({
+    success: true,
+    data: sortedBooks,
+  });
+};
