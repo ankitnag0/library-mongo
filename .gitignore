@@ -1,4 +1,6 @@
 .env
-node_modules
+node_modules/
 requests
-mongo-data
+mongo-data/
+redis-data/
+dist/

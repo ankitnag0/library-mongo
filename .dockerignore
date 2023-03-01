@@ -1,2 +1,7 @@
-node_modules
-mongo-data
+./node_modules
+mongo-data/
+redis-data/
+Dockerfile
+.dockerignore
+docker-compose.yml
+dist/
