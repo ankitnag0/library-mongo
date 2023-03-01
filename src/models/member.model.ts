@@ -12,6 +12,7 @@ interface IMember {
   checkout: [mongoose.Schema.Types.ObjectId];
 }
 
+// Instance methods
 interface IMemberMethods {
   comparePassword: (password: string) => Promise<boolean>;
   generateAuthToken: () => Promise<string>;

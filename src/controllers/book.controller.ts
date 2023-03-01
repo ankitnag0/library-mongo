@@ -14,6 +14,7 @@ export const addBook = async (req: Request, res: Response): Promise<void> => {
     description,
     copies,
   });
+
   const savedBook = await newBook.save();
   await redisClient.del("books");
   res.status(201).json({
@@ -26,6 +27,7 @@ export const addBook = async (req: Request, res: Response): Promise<void> => {
 export const getBooks = async (req: Request, res: Response): Promise<void> => {
   let data: unknown;
   const cacheResults = await redisClient.get("books");
+
   if (cacheResults === null) {
     const books = await Book.find();
     await redisClient.setEx(
@@ -47,9 +49,9 @@ export const getBooks = async (req: Request, res: Response): Promise<void> => {
 // Get a book by id
 export const getBook = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-
   let data: unknown;
   const cacheResults = await redisClient.get(`book:${id}`);
+
   if (cacheResults === null) {
     const book = await Book.findById(id);
     if (!book) {
@@ -84,7 +86,6 @@ export const updateBook = async (
     { title, author, description, copies },
     { new: true }
   );
-
   if (!book) {
     throw new ApiError(404, "Book not found");
   }
@@ -102,7 +103,6 @@ export const deleteBook = async (
 ): Promise<void> => {
   const { id } = req.params;
   const book = await Book.findByIdAndDelete(id);
-
   if (!book) {
     throw new ApiError(404, "Book not found");
   }
@@ -118,9 +118,11 @@ function mergeSort(arr: any[]) {
   if (arr.length <= 1) {
     return arr;
   }
+
   const middle = Math.floor(arr.length / 2);
   const left = arr.slice(0, middle);
   const right = arr.slice(middle);
+
   return merge(mergeSort(left), mergeSort(right));
 }
 
@@ -148,6 +150,7 @@ export const getSortedBooks = async (req: Request, res: Response) => {
     config.redisCacheExpiration,
     JSON.stringify(books)
   );
+
   const sortedBooks = mergeSort(books);
   res.status(200).send({
     success: true,
